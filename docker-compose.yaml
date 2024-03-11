@@ -1,32 +1,34 @@
 version: '3.8'
-services: 
-  #mongodb
+services:
+  # MongoDB
   mongodb:
     image: mongo:latest
-    container_name: mongo_personal_website
+    container_name: mongodb_persional_website
     restart: always
     environment:
-      MONGO_INITDB_ROOT_USERNAME: testuser
-      MONGO_INITDB_ROOT_PASSWORD: testpassword
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
       AUTH: admin
     ports:
-      - '27023:27023'
+      - '27017:27017'
     volumes:
-      - 'mongodb_data:/data/db'
-  #mongo-express
+      - 'my_mongodb_data:/data/db'
+
+  # Mongo Express
   mongo-express:
     image: mongo-express:latest
-    container_name: mongo_express_personal_website
+    container_name: mongo-express_persional_website
     restart: always
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: testuser
-      ME_CONFIG_MONGODB_ADMINPASSWORD: testpassword
-      ME_CONFIG_BASICAUTH_USERNAME: hello
-      ME_CONFIG_BASICAUTH_PASSWORD: hellopassword
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGODB_ADMINUSERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGODB_ADMINPASSWORD}
+      ME_CONFIG_BASICAUTH_USERNAME: ${AUTH_USERNAME}  
+      ME_CONFIG_BASICAUTH_PASSWORD: ${AUTH_PASSWORD}
+      ME_CONFIG_MONGODB_SERVER: mongodb
     ports:
-      - '8083:8083'
+      - '8081:8081'
     depends_on:
       - mongodb
 volumes:
-  mongodb_data:
+  my_mongodb_data:
     driver: local
